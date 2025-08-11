@@ -30,47 +30,103 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function oihana\commands\helpers\clearConsole;
 
 /**
- * Command to manage `robots.txt` file operations such as create or remove.
+ * Console command to manage a project's robots.txt file.
  *
- * This command delegates the action execution to methods defined
- * in the {@see RobotsActions} trait.
+ * Overview
+ * - Provides sub-commands to create and remove the robots.txt file.
+ * - Delegates the actual work to methods brought in by the {@see RobotsActions} trait,
+ *   which aggregates {@see \oihana\robots\actions\RobotsCreateAction} and {@see \oihana\robots\actions\RobotsRemoveAction}.
+ * - Validates the requested action against {@see RobotsAction}.
  *
- * It supports subcommands like `create` and `remove` to manipulate the robots.txt file.
+ * Usage
+ *   bin/console command:robots <action> [options]
+ *
+ * Arguments
+ * - action (required): One of the supported actions declared in {@see RobotsAction}.
+ *   - "create": Create the robots.txt file (if a path is provided with --file, it will be used; otherwise default configuration applies).
+ *   - "remove": Delete the robots.txt file.
+ *
+ * Options
+ * -c, --clear            Clear the console before running the command (from {@see CommandOption}).
+ * -f, --file=PATH        The robots.txt file path (from {@see RobotsOption}).
+ *
+ * Behavior and resolution rules
+ * - When --file is a relative path, it is resolved against the current working directory.
+ * - For creation and deletion, directory existence and permissions are validated. A failure raises a FileException in the action layer.
+ * - If the action name does not match {@see RobotsAction} or the corresponding method is missing, an UnexpectedValueException is thrown.
+ * - The command logs to the console and returns an appropriate {@see ExitCode}.
+ *
+ * Exit codes
+ * - 0 ({@see ExitCode::SUCCESS}): Command executed successfully.
+ * - 1 ({@see ExitCode::FAILURE}): An error occurred (invalid action, IO failure, etc.).
+ *
+ * Exceptions
+ * - {@see \oihana\files\exceptions\FileException}: When the target path is invalid or not writable (raised by actions).
+ * - {@see UnexpectedValueException}: When an invalid or unsupported action is provided.
+ * - {@see ExitException}: Used for controlled early exits returning SUCCESS.
+ *
+ * Configuration and DI
+ * - The command can receive initial options via its constructor ($init). Robot-specific options are initialized
+ *   via {@see \oihana\robots\traits\RobotsTrait::initializeRobotsOptions()} and stored in $this->robotsOptions.
+ * - Global command options are configured with {@see CommandOption::configure()} and robot-specific ones with {@see RobotsOption::configure()}.
+ *
+ * Examples
+ * - Create a new robots.txt file
+ * ```php
+ * // bin/console command:robots create
+ * ```
+ *
+ * - Create a custom robots.txt file
+ * ```php
+ * // bin/console command:robots create --file /var/www/my-website/htdocs/robots.txt
+ * ```
+ *
+ * - Remove a robots.txt file
+ * ```php
+ * // bin/console command:robots remove
+ * ```
+ *
+ * - Remove a custom robots.txt file
+ * ```php
+ * // bin/console command:robots remove --file /var/www/my-website/htdocs/robots.txt
+ * ```
+ *
+ * - Create a new robots.txt file after clearing the console
+ * ```php
+ * // bin/console command:robots create --clear
+ * ```
  *
  * @package oihana\robots\commands
- *
- * @example Create a new robots.txt file
- * ```shell
- * bin/console command:robots create
- * ```
- *
- * @example Create a custom robots.txt file
- * ```shell
- * bin/console command:robots create --file /var/www/my-website/htdocs/robots.txt
- * ```
- *
- * @example Remove a robots.txt file
- * ```shell
- * bin/console command:robots remove
- * ```
- *
- * @example Remove a custom robots.txt file
- * ```shell
- * bin/console command:robots remove --file /var/www/my-website/htdocs/robots.txt
- * ```
- *
- * @example Create a new robots.txt file after clearing the console
- * ```shell
- * bin/console command:robots create --clear
- * ```
  */
 class RobotsCommand extends Kernel
 {
     /**
-     * Creates a new MemcachedCommand.
-     * @param string|null $name
-     * @param Container|null $container
-     * @param array $init
+     * Initializes the command and its robots options. The $init array can be either a flat options array
+     * or contain a 'robots' sub-array. In both cases, options are forwarded to RobotsOptions via
+     * initializeRobotsOptions().
+     *
+     * Example (programmatic registration with initial robots options):
+     * ```php
+     * use DI\Container;
+     * use oihana\robots\commands\RobotsCommand;
+     *
+     * $container = new Container();
+     * $command = new RobotsCommand(
+     *     null, // let the parent/kernel resolve the name or use the default
+     *     $container,
+     *     [
+     *         'robots' => [
+     *             'file'    => '/var/www/my-website/htdocs/robots.txt',
+     *             'content' => "User-agent: *\nDisallow: /private/"
+     *         ]
+     *     ]
+     * );
+     * ```
+     *
+     * @param string|null  $name       The command name (optional; defaults to null).
+     * @param Container|null $container A PSR-11 compatible container instance (optional).
+     * @param array         $init       Initial options, may include a 'robots' key.
+     *
      * @throws DependencyException
      * @throws NotFoundException
      * @throws ContainerExceptionInterface
@@ -78,7 +134,7 @@ class RobotsCommand extends Kernel
      */
     public function __construct
     (
-        ?string    $name ,
+        ?string    $name = null ,
         ?Container $container = null ,
         array      $init = []
     )
@@ -95,13 +151,63 @@ class RobotsCommand extends Kernel
     public const string NAME = 'command:robots' ;
 
     /**
-     * Configures the current command.
+     * Configures the current command: arguments and options.
+     *
+     * This method registers:
+     * - A required "action" argument ({@see CommandArg::ACTION}) that must be one of {@see RobotsAction} values
+     *   (e.g., "create", "remove").
+     * - Global options via {@see CommandOption::configure()} (notably -c|--clear to clear the console).
+     * - Robot-specific options via {@see RobotsOption::configure()} (notably -f|--file to target a robots.txt path).
+     *
+     * Notes
+     * - To customize what options are exposed, you can override this method in a subclass and delegate with flags to
+     *   the static configurators. For example, you can disable the clear option or the file option by passing "false"
+     *   to their respective helper methods.
+     *
+     * Examples
+     * - Default configuration (this class)
+     * ```php
+     * // Registers the required "action" argument and both the global and robots options.
+     * $this->addArgument(CommandArg::ACTION, InputArgument::REQUIRED, 'Action to perform a `robot` subcommand: create, remove, etc.');
+     * CommandOption::configure($this); // adds -c | --clear
+     * RobotsOption::configure($this);  // adds -f | --file
+     * ```
+     *
+     * - Override in a subclass to disable the clear option
+     * ```php
+     * use Symfony\Component\Console\Input\InputArgument;
+     * use oihana\commands\options\CommandOption;
+     * use oihana\robots\options\RobotsOption;
+     * use oihana\commands\enums\CommandArg;
+     *
+     * protected function configure(): void
+     * {
+     *     $this->addArgument(CommandArg::ACTION, InputArgument::REQUIRED, 'Action to perform a `robot` subcommand.');
+     *     CommandOption::configure($this, false); // do not add -c|--clear
+     *     RobotsOption::configure($this);         // keep -f|--file
+     * }
+     * ```
+     *
+     * - Override in a subclass to disable the file option
+     * ```php
+     * use Symfony\Component\Console\Input\InputArgument;
+     * use oihana\commands\options\CommandOption;
+     * use oihana\robots\options\RobotsOption;
+     * use oihana\commands\enums\CommandArg;
+     *
+     * protected function configure(): void
+     * {
+     *     $this->addArgument(CommandArg::ACTION, InputArgument::REQUIRED, 'Action to perform a `robot` subcommand.');
+     *     CommandOption::configure($this);          // keep -c|--clear
+     *     RobotsOption::configure($this, false);    // do not add -f|--file
+     * }
+     * ```
+     *
      * @return void
      */
     protected function configure() : void
     {
         $this->addArgument( CommandArg::ACTION , InputArgument::REQUIRED , 'Action to perform a `robot` subcommand: create, remove, etc.' ) ;
-
         CommandOption::configure( $this ) ;
         RobotsOption::configure( $this ) ;
     }
@@ -139,7 +245,6 @@ class RobotsCommand extends Kernel
                     );
                 }
             }
-
 
             if( RobotsAction::includes( $this->action ) )
             {

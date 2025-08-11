@@ -2,36 +2,130 @@
 
 ![Oihana PHP System](https://raw.githubusercontent.com/BcommeBois/oihana-php-robots/main/assets/images/oihana-php-robots-logo-inline-512x160.png)
 
-A PHP library for creates robots.txt files, built on top of the oihana-php-commands library.
+A PHP library to create and manage robots.txt files, built on top of the oihana-php-commands library.
 
-[![Latest Version](https://img.shields.io/packagist/v/oihana/php-robots.svg?style=flat-square)](https://packagist.org/packages/oihana/php-robots)  
-[![Total Downloads](https://img.shields.io/packagist/dt/oihana/php-robots.svg?style=flat-square)](https://packagist.org/packages/oihana/php-robots)  
+[![Latest Version](https://img.shields.io/packagist/v/oihana/php-robots.svg?style=flat-square)](https://packagist.org/packages/oihana/php-robots)
+[![Total Downloads](https://img.shields.io/packagist/dt/oihana/php-robots.svg?style=flat-square)](https://packagist.org/packages/oihana/php-robots)
 [![License](https://img.shields.io/packagist/l/oihana/php-robots.svg?style=flat-square)](LICENSE)
+
+## ✨ Features
+- Create or remove a project's robots.txt from the CLI
+- Optional custom path via -f|--file (absolute or relative)
+- Clear console support via -c|--clear
+- Config-driven defaults (config.toml)
 
 ## 📦 Installation
 
-> **Requires [PHP 8.4+](https://php.net/releases/)**
+> Requires PHP 8.4+
 
-Install via [Composer](https://getcomposer.org):
+Install via Composer:
 
-### 
-```shell
+```bash
 composer require oihana/php-robots
 ```
+
+## 🚀 Usage
+
+The package provides a Symfony Console command named command:robots with actions:
+- create: Generate a robots.txt file
+- remove: Delete a robots.txt file
+
+Examples:
+
+Create a robots.txt using defaults
+```shell
+ bin/console command:robots create
+```
+
+Create a robots.txt at a custom path
+```shell
+bin/console command:robots create --file /var/www/my-website/htdocs/robots.txt
+```
+
+Remove the default robots.txt
+```shell
+bin/console command:robots remove
+```
+
+Remove a robots.txt at a custom path
+```shell
+bin/console command:robots remove --file /var/www/my-website/htdocs/robots.txt
+```
+
+Clear the console before running
+```shell
+bin/console command:robots create --clear
+```
+
+### Options
+- -c, --clear         Clear the console before running
+- -f, --file=PATH     Target robots.txt file path
+
+Notes:
+- If --file is a relative path, it is resolved against the current working directory.
+- On creation/removal, parent directory existence and permissions are validated.
+
+## ⚙️ Configuration
+
+You can set defaults in config/config.toml under the [robots] section:
+
+```toml
+[robots]
+file        = "/path/to/your/project/htdocs/robots.txt"
+overwrite   = true
+permissions = 0o644
+owner       = "www-data"
+group       = "www-data"
+content     = '''
+User-agent: *
+Disallow: /
+'''
+```
+
+## 🧪 Programmatic usage
+
+You can instantiate and configure the command in PHP if needed:
+
+```php
+use DI\Container;
+use oihana\robots\commands\RobotsCommand;
+
+$container = new Container();
+$command = new RobotsCommand
+(
+    null,        // let kernel resolve the name
+    $container,
+    [
+        'robots' => [
+            'file'    => '/var/www/my-website/htdocs/robots.txt',
+            'content' => "User-agent: *\nDisallow: /private/"
+        ]
+    ]
+);
+```
+
+## 🔚 Exit codes
+- 0 Success
+- 1 Failure (invalid action, IO failure, etc.)
+
+## ❓ Troubleshooting
+- Ensure the parent directory for the robots.txt is writable (especially when using a custom --file path).
+- When using relative paths with --file, they are resolved from the current working directory (pwd).
+- For more details, see the inline documentation in [RobotsCommand.php](https://github.com/BcommeBois/oihana-php-robots/blob/main/src/oihana/robots/commands/RobotsCommand.php).
 
 ## ✅ Running Unit Tests
 
 To run all tests:
+
 ```bash
 composer test
 ```
 
 ## 🧾 License
 
-This project is licensed under the [Mozilla Public License 2.0 (MPL-2.0)](https://www.mozilla.org/en-US/MPL/2.0/).
+This project is licensed under the Mozilla Public License 2.0 (MPL-2.0).
 
 ## 👤 About the author
-
-* Author : Marc ALCARAZ (aka eKameleon)
-* Mail : marc@ooop.fr
-* Website : http://www.ooop.fr
+- Author: Marc ALCARAZ (aka eKameleon)
+- Mail: marc@ooop.fr
+- Website: http://www.ooop.fr
