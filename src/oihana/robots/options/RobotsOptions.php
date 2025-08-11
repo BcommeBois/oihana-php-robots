@@ -1,14 +1,15 @@
 <?php
 
-namespace oihana\commands\plugins\robots\options;
+namespace oihana\robots\options;
 
 use oihana\options\Options;
 use oihana\enums\Char;
-use oihana\files\enums\MakeFileOption;
 
 /**
  * The options of the robot.txt command.
- * @see MakeFileOption
+ * @package oihana\robots\options
+ * @author  Marc Alcaraz (ekameleon)
+ * @since   1.0.0
  */
 class RobotsOptions extends Options
 {
@@ -21,7 +22,7 @@ class RobotsOptions extends Options
      * The content of the robots.txt file.
      * @var string|null
      */
-    public ?string $content ;
+    public ?string $content = null ;
 
     /**
      * Set the robots.txt file path.

@@ -1,8 +1,9 @@
 <?php
 
-namespace oihana\commands\plugins\robots\traits;
+namespace oihana\robots\traits;
 
-use oihana\commands\plugins\robots\options\RobotsOptions;
+use oihana\robots\options\RobotsOptions;
+
 use oihana\commands\traits\FileTrait;
 use oihana\files\exceptions\FileException;
 
@@ -13,6 +14,10 @@ use oihana\files\exceptions\FileException;
  * - Creating a robots.txt file from options (path, contents, etc.)
  * - Deleting the robots.txt file with optional assertions
  * - Initializing internal options from raw input
+ *
+ * @package oihana\robots\traits
+ * @author  Marc Alcaraz (ekameleon)
+ * @since   1.0.0
  */
 trait RobotsTrait
 {
@@ -47,12 +52,12 @@ trait RobotsTrait
      * );
      * ```
      *
-     * @param RobotsOptions|null $options Optional options instance; if null, falls back to `$this->robotsOptions`.
-     * @param bool               $verbose The verbose mode.
+     * @param null|array|RobotsOptions $options Optional options instance; if null, falls back to `$this->robotsOptions`.
+     * @param bool                     $verbose The verbose mode.
      *
      * @return int `ExitCode::SUCCESS` (0) if creation succeeds.
      */
-    public function createRobots( ?RobotsOptions $options = null , bool $verbose = false ) :int
+    public function createRobots( null|array|RobotsOptions $options = null , bool $verbose = false ) :int
     {
         $options = RobotsOptions::resolve( $this->robotsOptions , $options ) ;
         return $this->makeFile
@@ -68,15 +73,15 @@ trait RobotsTrait
      *
      * If no options are passed, the method uses the internal `$robotsOptions` property, if available.
      *
-     * @param RobotsOptions|null $options    Optional options instance; if null, falls back to `$this->robotsOptions`.
-     * @param bool               $verbose    The verbose mode.
-     * @param bool               $assertable If true, asserts file existence and permissions before deletion.
+     * @param null|array|RobotsOptions $options    Optional options instance; if null, falls back to `$this->robotsOptions`.
+     * @param bool                     $verbose    The verbose mode.
+     * @param bool                     $assertable If true, asserts file existence and permissions before deletion.
      *
      * @return int `ExitCode::SUCCESS` (0) if deletion succeeds.
      *
      * @throws FileException If the file cannot be deleted or assertions fail.
      */
-    public function deleteRobots( ?RobotsOptions $options = null , bool $verbose = false , bool $assertable = false ):int
+    public function deleteRobots( null|array|RobotsOptions $options = null , bool $verbose = false , bool $assertable = false ):int
     {
         $options = RobotsOptions::resolve( $this->robotsOptions , $options ) ;
         return $this->deleteFile

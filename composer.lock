@@ -245,12 +245,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BcommeBois/oihana-php-commands.git",
-                "reference": "cdc84333060bae40fb5d3bb63201bf3151f5533e"
+                "reference": "32cc24556d28ea9896cd8f08f68b4e0f848e3cc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BcommeBois/oihana-php-commands/zipball/cdc84333060bae40fb5d3bb63201bf3151f5533e",
-                "reference": "cdc84333060bae40fb5d3bb63201bf3151f5533e",
+                "url": "https://api.github.com/repos/BcommeBois/oihana-php-commands/zipball/32cc24556d28ea9896cd8f08f68b4e0f848e3cc5",
+                "reference": "32cc24556d28ea9896cd8f08f68b4e0f848e3cc5",
                 "shasum": ""
             },
             "require": {
@@ -309,7 +309,7 @@
                 "issues": "https://github.com/BcommeBois/oihana-php-commands/issues",
                 "source": "https://github.com/BcommeBois/oihana-php-commands/tree/main"
             },
-            "time": "2025-08-10T15:49:09+00:00"
+            "time": "2025-08-11T15:28:19+00:00"
         },
         {
             "name": "oihana/php-core",
@@ -317,12 +317,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BcommeBois/oihana-php-core.git",
-                "reference": "dee441a981dba4b7b1dd481fbcb3233dcca3bb1e"
+                "reference": "f3dc6ed1aef97fd68acf0f4f451d7cf574f72219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BcommeBois/oihana-php-core/zipball/dee441a981dba4b7b1dd481fbcb3233dcca3bb1e",
-                "reference": "dee441a981dba4b7b1dd481fbcb3233dcca3bb1e",
+                "url": "https://api.github.com/repos/BcommeBois/oihana-php-core/zipball/f3dc6ed1aef97fd68acf0f4f451d7cf574f72219",
+                "reference": "f3dc6ed1aef97fd68acf0f4f451d7cf574f72219",
                 "shasum": ""
             },
             "require": {
@@ -446,7 +446,7 @@
                 "issues": "https://github.com/BcommeBois/oihana-php-core/issues",
                 "source": "https://github.com/BcommeBois/oihana-php-core/tree/main"
             },
-            "time": "2025-08-11T09:20:17+00:00"
+            "time": "2025-08-11T16:07:44+00:00"
         },
         {
             "name": "oihana/php-files",
