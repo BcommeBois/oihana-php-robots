@@ -9,7 +9,7 @@ A PHP library to create and manage `robots.txt` files, built on top of the oihan
 [![License](https://img.shields.io/packagist/l/oihana/php-robots.svg?style=flat-square)](LICENSE)
 
 ## ✨ Features
-- 
+
 - Create or remove a project's robots.txt from the CLI
 - Optional custom path via -f|--file (absolute or relative)
 - Clear console support via -c|--clear
@@ -67,10 +67,10 @@ bin/console command:robots create --clear
 ```
 
 ### Options
-| Option  | ShortCut | Description                        |
-|---------|----------|------------------------------------|
-| --clear | -c       | Clear the console before running   |
-| --path  | -p       | The directory path of 'robots.txt' |
+| Option  | ShortCut | Description                                  |
+|---------|----------|----------------------------------------------|
+| --clear | -c       | Clear the console before running             |
+| --path  | -p       | The directory path of the 'robots.txt' file  |
 
 
 **Notes:**
