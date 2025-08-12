@@ -19,7 +19,6 @@
     "scripts": {
         "console": "bin/console",
         "robots": "@console command:robots",
-        "doc": "rm -rf docs && mkdir docs && cp -r assets docs/assets && ./vendor/bin/phpdoc -c phpdoc.xml -v" ,
         "test": "./vendor/bin/phpunit"
     },
     "autoload": {

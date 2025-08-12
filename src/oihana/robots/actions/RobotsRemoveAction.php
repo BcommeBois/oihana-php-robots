@@ -56,24 +56,23 @@ trait RobotsRemoveAction
 
         $options = [] ;
 
-        $file = $input->getOption( RobotsOption::FILE  ) ;
-        if( $file )
+        $path = $input->getOption( RobotsOption::PATH  ) ;
+        if( $path )
         {
-            if( isAbsolutePath( $file ) )
+            if( isAbsolutePath( $path ) )
             {
-                $options[ RobotsOption::FILE ] = $file ;
+                $options[ RobotsOption::PATH ] = $path ;
             }
             else
             {
-                $relativePath = getcwd() . DIRECTORY_SEPARATOR . $file ;
-                $parentDir    = dirname( $relativePath ) ;
-                if ( is_dir( $parentDir ) && is_writable( $parentDir ) )
+                $relativePath = getcwd() . DIRECTORY_SEPARATOR . $path ;
+                if ( is_dir( $relativePath ) && is_writable( $relativePath ) )
                 {
-                    $options[ RobotsOption::FILE ] = $relativePath ;
+                    $options[ RobotsOption::PATH ] = $relativePath ;
                 }
                 else
                 {
-                    throw new FileException( sprintf( 'Failed to remove the file %s ', $file ) ) ;
+                    throw new FileException( sprintf( 'Failed to remove the "robots.txt" file %s ', $path ) ) ;
                 }
             }
         }

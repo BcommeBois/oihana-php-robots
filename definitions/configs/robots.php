@@ -3,7 +3,7 @@
 use Psr\Container\ContainerInterface ;
 
 use oihana\robots\enums\RobotsConfig      as Config      ;
-use oihana\robots\enums\RobotsDefinitions as Definitions ;
+use oihana\robots\enums\RobotsDefinition as Definitions ;
 
 return
 [

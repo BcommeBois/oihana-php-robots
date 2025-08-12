@@ -5,7 +5,7 @@ use DI\Container;
 use oihana\enums\Param;
 
 use oihana\robots\enums\RobotsAction;
-use oihana\robots\enums\RobotsDefinitions as Definitions;
+use oihana\robots\enums\RobotsDefinition as Definitions;
 use oihana\robots\commands\RobotsCommand;
 
 // bin/console command:robots create

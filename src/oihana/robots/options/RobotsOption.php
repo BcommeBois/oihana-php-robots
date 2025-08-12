@@ -16,10 +16,10 @@ use Symfony\Component\Console\Input\InputOption;
 class RobotsOption extends Option
 {
     public const string CONTENT     = 'content'     ;
-    public const string FILE        = 'file'        ;
     public const string GROUP       = 'group'       ;
     public const string OVERWRITE   = 'overwrite'   ;
     public const string OWNER       = 'owner'       ;
+    public const string PATH        = 'path'        ;
     public const string PERMISSIONS = 'permissions' ;
 
     /**
@@ -41,10 +41,17 @@ class RobotsOption extends Option
         {
             $command->addOption
             (
-                name        : self::FILE ,
-                shortcut    :  'f' ,
+                name        : self::CONTENT ,
                 mode        : InputOption::VALUE_OPTIONAL ,
-                description :  'The robots.txt file path.'
+                description :  "Content of the 'robots.txt' file to be used or generated, example: --content=$'User-agent: *\\nDisallow: /admin\\nAllow: /public'"
+            ) ;
+
+            $command->addOption
+            (
+                name        : self::PATH ,
+                shortcut    :  'p' ,
+                mode        : InputOption::VALUE_OPTIONAL ,
+                description :  'The "robots.txt" file path.'
             ) ;
         }
 

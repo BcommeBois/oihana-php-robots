@@ -12,7 +12,11 @@ final class RobotsOptionTest extends TestCase
 {
     public function testConstantFile()
     {
-        $this->assertEquals(  RobotsOption::FILE , 'file');
+        $this->assertEquals(  RobotsOption::CONTENT     , 'content'     );
+        $this->assertEquals(  RobotsOption::GROUP       , 'group'       );
+        $this->assertEquals(  RobotsOption::OVERWRITE   , 'overwrite'   );
+        $this->assertEquals(  RobotsOption::PATH        , 'path'   );
+        $this->assertEquals(  RobotsOption::PERMISSIONS , 'permissions' );
     }
 
     public function testConstantsExist()
@@ -20,7 +24,7 @@ final class RobotsOptionTest extends TestCase
         $expectedConstants =
         [
             'content',
-            'file',
+            'path',
             'group',
             'overwrite',
             'owner',
@@ -40,7 +44,7 @@ final class RobotsOptionTest extends TestCase
         $command = new Command('test');
         $command = RobotsOption::configure($command, true);
 
-        $option = $command->getDefinition()->getOption('file');
+        $option = $command->getDefinition()->getOption('path');
         $this->assertTrue($option->isValueOptional());
     }
 
@@ -48,7 +52,7 @@ final class RobotsOptionTest extends TestCase
     {
         $command = new Command('test');
         $command = RobotsOption::configure($command, false);
-        $this->assertFalse($command->getDefinition()->hasOption('file'));
+        $this->assertFalse($command->getDefinition()->hasOption('path'));
     }
 
     public function testGetCommandOptionHyphenates()

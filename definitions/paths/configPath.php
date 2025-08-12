@@ -1,6 +1,6 @@
 <?php
 
-use oihana\robots\enums\RobotsDefinitions as Definitions;
+use oihana\robots\enums\RobotsDefinition as Definitions;
 
 return
 [

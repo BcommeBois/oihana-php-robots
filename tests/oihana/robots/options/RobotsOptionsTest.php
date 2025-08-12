@@ -14,7 +14,7 @@ final class RobotsOptionsTest extends TestCase
 
         $this->assertFalse($opts->append, 'append should default to false');
         $this->assertNull($opts->content, 'content should default to null');
-        $this->assertNull($opts->file, 'file should default to null');
+        $this->assertNull($opts->path, 'path should default to null');
         $this->assertTrue($opts->force, 'force should default to true');
         $this->assertNull($opts->group, 'group should default to null');
         $this->assertTrue($opts->lock, 'lock should default to true');
@@ -28,7 +28,7 @@ final class RobotsOptionsTest extends TestCase
         $init = [
             'append'      => true,
             'content'     => 'User-agent: *',
-            'file'        => '/robots.txt',
+            'path'        => '/',
             'force'       => false,
             'group'       => 'www-data',
             'lock'        => false,
@@ -41,7 +41,7 @@ final class RobotsOptionsTest extends TestCase
 
         $this->assertTrue($opts->append);
         $this->assertSame('User-agent: *', $opts->content);
-        $this->assertSame('/robots.txt', $opts->file);
+        $this->assertSame('/', $opts->path);
         $this->assertFalse($opts->force);
         $this->assertSame('www-data', $opts->group);
         $this->assertFalse($opts->lock);
@@ -50,15 +50,16 @@ final class RobotsOptionsTest extends TestCase
         $this->assertSame(0644, $opts->permissions);
     }
 
-    public function testToStringReturnsFileOrEmpty(): void
+    public function testToStringReturnsRobotsTxtOnly(): void
     {
         $opts = new RobotsOptions();
+        $this->assertSame('robots.txt', (string) $opts);
+    }
 
-        // By default file is null, so __toString returns empty string
-        $this->assertSame('', (string) $opts);
-
-        // When file is set, __toString returns it
-        $opts->file = '/var/www/robots.txt';
-        $this->assertSame('/var/www/robots.txt', (string) $opts);
+    public function testToStringReturnsFilePath(): void
+    {
+        $opts = new RobotsOptions();
+        $opts->path = '/var/www';
+        $this->assertSame('/var/www/robots.txt', (string) $opts ); ;
     }
 }

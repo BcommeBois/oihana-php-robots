@@ -11,7 +11,7 @@ use oihana\reflections\traits\ConstantsTrait;
  * @author  Marc Alcaraz (ekameleon)
  * @since   1.0.0
  */
-class RobotsDefinitions
+class RobotsDefinition
 {
     use ConstantsTrait ;
 

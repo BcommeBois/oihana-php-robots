@@ -5,6 +5,7 @@ namespace oihana\robots\actions;
 use oihana\commands\enums\ExitCode;
 use oihana\commands\traits\UITrait;
 
+use oihana\files\exceptions\DirectoryException;
 use oihana\files\exceptions\FileException;
 use oihana\robots\options\RobotsOption;
 use oihana\robots\traits\RobotsTrait;
@@ -48,7 +49,7 @@ trait RobotsCreateAction
      *
      * @return int Returns {@see ExitCode::SUCCESS} on successful file creation.
      *
-     * @throws FileException If the file cannot be created due to directory permission or path issues.
+     * @throws DirectoryException If the path cannot be created due to directory permission or path issues.
      */
     public function create( InputInterface $input, OutputInterface $output ) :int
     {
@@ -56,26 +57,31 @@ trait RobotsCreateAction
 
         $options = [] ;
 
-        $file = $input->getOption( RobotsOption::FILE  ) ;
-        if( $file )
+        $path = $input->getOption( RobotsOption::PATH  ) ;
+        if( $path )
         {
-            if( isAbsolutePath( $file ) )
+            if( isAbsolutePath( $path ) )
             {
-                $options[ RobotsOption::FILE ] = $file ;
+                $options[ RobotsOption::PATH ] = $path ;
             }
             else
             {
-                $relativePath = getcwd() . DIRECTORY_SEPARATOR . $file ;
-                $parentDir    = dirname( $relativePath ) ;
-                if ( is_dir( $parentDir ) && is_writable( $parentDir ) )
+                $relativePath = getcwd() . DIRECTORY_SEPARATOR . $path ;
+                if ( is_dir( $relativePath ) && is_writable( $relativePath ) )
                 {
-                    $options[ RobotsOption::FILE ] = $relativePath ;
+                    $options[ RobotsOption::PATH ] = $relativePath ;
                 }
                 else
                 {
-                    throw new FileException( sprintf( 'Failed to create the file in the directory %s ', $file ) ) ;
+                    throw new DirectoryException( sprintf( 'Failed to create the "robots.txt" file in the directory %s ', $path ) ) ;
                 }
             }
+        }
+
+        $content = $input->getOption( RobotsOption::CONTENT ) ;
+        if( $content )
+        {
+            $options[ RobotsOption::CONTENT ] = str_replace('\n', PHP_EOL, $content);
         }
 
         $this->runIOAction

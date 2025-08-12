@@ -4,6 +4,7 @@ namespace oihana\robots\options;
 
 use oihana\options\Options;
 use oihana\enums\Char;
+use function oihana\files\path\joinPaths;
 
 /**
  * The options of the robot.txt command.
@@ -14,6 +15,11 @@ use oihana\enums\Char;
 class RobotsOptions extends Options
 {
     /**
+     * The 'robots.txt' file name.
+     */
+    public const string FILE = 'robots.txt';
+
+    /**
      * If true, appends content instead of overwriting. Default: false.
      */
     public bool $append = false ;
@@ -23,12 +29,6 @@ class RobotsOptions extends Options
      * @var string|null
      */
     public ?string $content = null ;
-
-    /**
-     * Set the robots.txt file path.
-     * @var string|null
-     */
-    public ?string $file = null ;
 
     /**
      * If true, creates parent directories if they do not exist. Default: true.
@@ -59,10 +59,25 @@ class RobotsOptions extends Options
     public ?string $owner = null ;
 
     /**
+     * Set the 'robots.txt' file path.
+     * @var string|null
+     */
+    public ?string $path = null ;
+
+    /**
      * File permissions to set (octal). Default: 0644.
      * @var int|null
      */
     public ?int $permissions = null ;
+
+    /**
+     * Returns the full 'robots.txt' file path.
+     * @return string
+     */
+    public function getFilePath():string
+    {
+        return joinPaths( $this->path ?? Char::EMPTY , self::FILE ) ;
+    }
 
     /**
      * Returns the string expression of the object.
@@ -70,6 +85,6 @@ class RobotsOptions extends Options
      */
     public function __toString() : string
     {
-        return $this->file ?? Char::EMPTY ;
+        return $this->getFilePath() ;
     }
 }

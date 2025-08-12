@@ -62,8 +62,8 @@ trait RobotsTrait
         $options = RobotsOptions::resolve( $this->robotsOptions , $options ) ;
         return $this->makeFile
         (
-            filePath : $options->file ,
-            content  : $options->content ,
+            filePath : $options->getFilePath() ,
+            content  : $options->content       ,
             verbose  : $verbose
         ) ;
     }
@@ -86,9 +86,9 @@ trait RobotsTrait
         $options = RobotsOptions::resolve( $this->robotsOptions , $options ) ;
         return $this->deleteFile
         (
-            filePath   : $options->file ,
-            verbose    : $verbose       ,
-            assertable : $assertable    ,
+            filePath   : $options->getFilePath() ,
+            verbose    : $verbose                ,
+            assertable : $assertable             ,
         ) ;
     }
 

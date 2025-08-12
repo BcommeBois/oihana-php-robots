@@ -3,8 +3,8 @@
 use DI\Container;
 
 use oihana\enums\IniOptions;
-use oihana\robots\enums\RobotsConfig      as Config      ;
-use oihana\robots\enums\RobotsDefinitions as Definitions ;
+use oihana\robots\enums\RobotsConfig     as Config      ;
+use oihana\robots\enums\RobotsDefinition as Definitions ;
 
 use function oihana\init\initConfig ;
 use function oihana\init\initDefaultTimezone;

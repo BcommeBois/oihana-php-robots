@@ -5,7 +5,7 @@ use Psr\Container\ContainerInterface ;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
-use oihana\robots\enums\RobotsDefinitions as Definitions;
+use oihana\robots\enums\RobotsDefinition as Definitions;
 
 return
 [
