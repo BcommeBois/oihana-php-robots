@@ -13,7 +13,7 @@ version     = "1.0.0"
 next        = "2.0.0"
 debug       = true
 loggable    = true
-memoryLimit = "256M"
+memoryLimit = "128M"
 timezone    = "Europe/Paris"
 
 ###### Command Settings
@@ -22,7 +22,7 @@ timezone    = "Europe/Paris"
 clearable = false # Auto clear the command at launch
 
 [robots]
-file        = "<website-root-path>/robots.txt"
+file        = "<website-root-path>" # ex: "var/www/example.com/htdocs"
 overwrite   = true
 permissions = 0o644
 owner       = "www-data"
