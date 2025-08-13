@@ -39,7 +39,7 @@ Examples:
 
 Create a `robots.txt` using defaults
 ```shell
- bin/console command:robots create
+bin/console command:robots create
 ```
 
 Create a `robots.txt` at a custom path

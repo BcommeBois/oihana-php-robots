@@ -2,7 +2,7 @@
 
 namespace oihana\robots\enums;
 
-use oihana\reflections\traits\ConstantsTrait;
+use oihana\reflect\traits\ConstantsTrait;
 
 /**
  * Enumeration of 'command:robots' command config keys.
