@@ -230,21 +230,8 @@ class RobotsCommand extends Kernel
         {
             $this->action = $input->getArgument(CommandArg::ACTION ) ?? Char::EMPTY ;
 
-            if( is_array( $this->actions ) && count( $this->actions ) > 0 )
-            {
-                if( !in_array( $this->action , $this->actions , true ) )
-                {
-                    throw new UnexpectedValueException
-                    (
-                        sprintf
-                        (
-                            'The action "%s" is not allowed. Allowed: %s' ,
-                            $this->action ,
-                            json_encode( $this->actions , JSON_UNESCAPED_SLASHES )
-                        )
-                    );
-                }
-            }
+            $this->assertActions( $this->action );
+
 
             if( RobotsAction::includes( $this->action ) )
             {
