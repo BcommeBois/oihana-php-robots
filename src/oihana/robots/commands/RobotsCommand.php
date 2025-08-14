@@ -232,7 +232,6 @@ class RobotsCommand extends Kernel
 
             $this->assertActions( $this->action );
 
-
             if( RobotsAction::includes( $this->action ) )
             {
                 if( method_exists( $this , $this->action )  )
