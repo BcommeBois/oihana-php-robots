@@ -231,7 +231,7 @@ class RobotsCommand extends Kernel
         $this->initializeConsoleLogger( $output ) ;
 
         [ $io , $timestamp ] = $this->startCommand( $input , $output );
-        
+
         try
         {
             $this->action = $input->getArgument(CommandArg::ACTION ) ?? Char::EMPTY ;
