@@ -198,7 +198,7 @@ class RobotsCommand extends Kernel
      * protected function configure(): void
      * {
      *     $this->addArgument(CommandArg::ACTION, InputArgument::REQUIRED, 'Action to perform a `robot` subcommand.');
-     *     CommandOption::configure($this);          // keep -c|--clear
+     *     CommandOption::configure($this);          // --clear
      *     RobotsOption::configure($this, false);    // do not add -f|--file
      * }
      * ```
@@ -207,8 +207,14 @@ class RobotsCommand extends Kernel
      */
     protected function configure() : void
     {
-        $this->addArgument( CommandArg::ACTION , InputArgument::REQUIRED , 'Action to perform a `robot` subcommand: create, remove, etc.' ) ;
-        CommandOption::configure( $this ) ;
+        CommandArg::configureAction
+        (
+            command     : $this ,
+            description : 'Action to perform a `robot` subcommand: create and remove.' , suggestedValues: [ 'create', 'remove' ]
+        ) ;
+
+        CommandOption::configureClear( $this ) ;
+
         RobotsOption::configure( $this ) ;
     }
 
