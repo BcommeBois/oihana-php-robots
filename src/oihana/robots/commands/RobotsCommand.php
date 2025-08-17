@@ -226,12 +226,12 @@ class RobotsCommand extends Kernel
      */
     protected function execute( InputInterface $input , OutputInterface $output ) : int
     {
-        [ $io , $timestamp ] = $this->startCommand( $input , $output );
+        clearConsole( $input->getOption( CommandOption::CLEAR ) ?? $this->commandOptions?->clearable ?? false );
 
         $this->initializeConsoleLogger( $output ) ;
 
-        clearConsole( $input->getOption( CommandOption::CLEAR ) ?? $this->commandOptions?->clearable ?? false );
-
+        [ $io , $timestamp ] = $this->startCommand( $input , $output );
+        
         try
         {
             $this->action = $input->getArgument(CommandArg::ACTION ) ?? Char::EMPTY ;
