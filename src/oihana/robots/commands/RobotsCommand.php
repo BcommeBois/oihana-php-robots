@@ -23,7 +23,6 @@ use oihana\robots\actions\RobotsActions;
 use oihana\robots\enums\RobotsAction;
 
 use Symfony\Component\Console\Exception\LogicException;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

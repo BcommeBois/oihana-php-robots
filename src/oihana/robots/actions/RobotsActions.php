@@ -2,7 +2,6 @@
 
 namespace oihana\robots\actions;
 
-
 /**
  * Aggregates all main actions related to `robots.txt` file management.
  *
