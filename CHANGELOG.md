@@ -9,6 +9,11 @@ and follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-03-30
+
+### Fixed
+- Fix the composer.json dependencies
+
 ---
 
 ## [1.0.0] - 2025-08-12

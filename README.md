@@ -72,7 +72,6 @@ bin/console command:robots create --clear
 | --clear | -c       | Clear the console before running             |
 | --path  | -p       | The directory path of the 'robots.txt' file  |
 
-
 **Notes:**
 - If `--path` is a relative path, it is resolved against the current working directory.
 - On creation/removal, parent directory existence and permissions are validated.
