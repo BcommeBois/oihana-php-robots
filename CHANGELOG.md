@@ -9,6 +9,10 @@ and follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Dependencies: replaced `oihana/php-system` with the focused `oihana/php-init` package (the only `php-system` namespace `php-robots` consumes is `oihana\init` — `initConfig`, `initDefaultTimezone`, `initErrors`, `initMemoryLimit`). Added `minimum-stability: dev` + `prefer-stable: true` so the split packages pulled transitively through `oihana/php-commands` resolve cleanly now that they carry stable tags. No code or public-API change.
+
 ## [1.0.1] - 2026-03-30
 
 ### Fixed
