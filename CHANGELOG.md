@@ -15,8 +15,16 @@ and follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.1] - 2026-03-30
 
+### Added
+- `oihana/php-exceptions` dependency for typed exception handling.
+
+### Changed
+- Refactored the `RobotsAction`, `RobotsConfig` and `RobotsDefinition` enums onto the focused `oihana/php-enums` and `oihana/php-reflect` libraries.
+- `RobotsCommand`: the requested action is now validated through `assertActions()`, alongside several internal refactors and simplifications of the command.
+- Stopped tracking `composer.lock` in git (now ignored and rebuilt from `composer.json`); `.gitignore` updated accordingly.
+
 ### Fixed
-- Fix the composer.json dependencies
+- Corrected the `composer.json` dependency declarations.
 
 ---
 
